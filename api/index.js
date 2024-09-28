@@ -5,6 +5,7 @@ const app = express(); // create an instance of express application
 const bcrypt = require('bcryptjs'); // used to hash passwords
 const mongoose = require('mongoose'); // used to connect to MongoDB
 const jwt = require('jsonwebtoken'); // used to sign and verify tokens
+const cookieParser = require('cookie-parser'); // used to parse cookies
 
 // salt is used to hash the password
 const salt = bcrypt.genSaltSync(10); 
@@ -13,7 +14,7 @@ const secret = "xdn4398r74639ncrf4328xm2mdshad"
 // enable cross-origin resource sharing
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
-app.use
+app.use(cookieParser());
 
 // connect to MongoDB
 mongoose.connect('mongodb+srv://mobashhirkhan:Mongodb.1!@cluster0.tclxicw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
@@ -50,7 +51,16 @@ app.post('/login', async (req,res) => {
 });
 
 app.get('/profile', (req, res) => {
+    const {token} = req.cookies;
+    jwt.verify(token, secret, {}, (err, info) => {
+        if (err) throw err;
+        res.json(info);
+    });
     res.json(req.cookies)
+});
+
+app.post('/logout', (req, res) => {
+    res.cookie('token', '').json('ok');
 });
 
 app.listen(4000); // start the server on port 4000
