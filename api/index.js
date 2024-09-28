@@ -13,6 +13,7 @@ const secret = "xdn4398r74639ncrf4328xm2mdshad"
 // enable cross-origin resource sharing
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
+app.use
 
 // connect to MongoDB
 mongoose.connect('mongodb+srv://mobashhirkhan:Mongodb.1!@cluster0.tclxicw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
@@ -48,5 +49,8 @@ app.post('/login', async (req,res) => {
     }
 });
 
+app.get('/profile', (req, res) => {
+    res.json(req.cookies)
+});
 
 app.listen(4000); // start the server on port 4000
