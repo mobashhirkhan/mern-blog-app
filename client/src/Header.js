@@ -1,3 +1,4 @@
+import { set } from "mongoose";
 import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
@@ -17,7 +18,8 @@ function logout() {
   fetch('http://localhost:4000/logout', {
     credentials: 'include',
     method: 'POST'
-  })
+  });
+  setUsername(null);
 }
 
 
