@@ -6,6 +6,9 @@ const bcrypt = require('bcryptjs'); // used to hash passwords
 const mongoose = require('mongoose'); // used to connect to MongoDB
 const jwt = require('jsonwebtoken'); // used to sign and verify tokens
 const cookieParser = require('cookie-parser'); // used to parse cookies
+const multer = require('multer'); // used to upload files
+const uploadMiddleware = multer({dest: 'uploads/'}); // set the destination folder for uploaded files
+const fs = require('fs'); // used to work with the file system
 
 // salt is used to hash the password
 const salt = bcrypt.genSaltSync(10); 
@@ -66,8 +69,13 @@ app.post('/logout', (req, res) => {
     res.cookie('token', '').json('ok');
 });
 
-app.post('/post', (req, res) => {
-    
+app.post('/post', uploadMiddleware.single('file'), (req, res) => {
+    const {originalname, path} = req.file;
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    const newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+    res.json({ext});
 });
 
 app.listen(4000); // start the server on port 4000
