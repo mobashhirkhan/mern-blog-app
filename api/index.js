@@ -19,6 +19,7 @@ const secret = "xdn4398r74639ncrf4328xm2mdshad"
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 // connect to MongoDB
 mongoose.connect('mongodb+srv://mobashhirkhan:Mongodb.1!@cluster0.tclxicw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
@@ -96,7 +97,12 @@ app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
 
 app.get('/post', async (req, res) => {
     // const posts = await Post.find();
-    res.json(await Post.find().populate('author', ['username']));
+    res.json(
+        await Post.find()
+        .populate('author', ['username'])
+        .sort({createdAt: -1})
+        .limit(20)
+    );
 });
 
 app.listen(4000); // start the server on port 4000
