@@ -102,3 +102,15 @@ button {
 form.login h1, form.register h1 {
   text-align: center;
 }
+
+div.post-page div.image {  
+  max-height: 250px;
+  display: flex;
+  overflow: hidden;
+}
+
+div.post-page div.image img {  
+  object-fit: cover;
+  object-position: center center;
+  
+}
